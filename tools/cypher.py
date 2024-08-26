@@ -45,9 +45,9 @@ RETURN
   reduce(output = '', i in range(0, length(path)-1) |
     output + CASE
       WHEN i = 0 THEN
-       startNode(rels[i]).name + CASE WHEN type(rels[i]) = 'ACTED_IN' THEN ' played '+ rels[i].role +' in 'ELSE ' directed ' END + endNode(rels[i]).title
-       ELSE
-         ' with '+ startNode(rels[i]).name + ', who '+ CASE WHEN type(rels[i]) = 'ACTED_IN' THEN 'played '+ rels[i].role +' in '
+        startNode(rels[i]).name + CASE WHEN type(rels[i]) = 'ACTED_IN' THEN ' played '+ rels[i].role +' in 'ELSE ' directed ' END + endNode(rels[i]).title
+        ELSE
+          ' with '+ startNode(rels[i]).name + ', who '+ CASE WHEN type(rels[i]) = 'ACTED_IN' THEN 'played '+ rels[i].role +' in '
     ELSE 'directed '
       END + endNode(rels[i]).title
       END
@@ -62,7 +62,6 @@ Question:
 """
 
 cypher_prompt = PromptTemplate.from_template(CYPHER_GENERATION_TEMPLATE)
-
 
 cypher_qa = GraphCypherQAChain.from_llm(
     llm,
