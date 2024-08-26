@@ -1,20 +1,9 @@
 from llm import llm
 from graph import graph
+from tools.general import general_chat
 from tools.vector import get_movie_plot
 from tools.cypher import cypher_qa
-
-# Create a movie chat chain
-from langchain_core.prompts import ChatPromptTemplate
-from langchain.schema import StrOutputParser
-
-chat_prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", "You are a movie expert providing information about movies."),
-        ("human", "{input}"),
-    ]
-)
-
-movie_chat = chat_prompt | llm | StrOutputParser()
+from tools.fuzzy import fuzzy_qa
 
 # Create a set of tools
 from langchain.tools import Tool
@@ -23,7 +12,7 @@ tools = [
     Tool.from_function(
         name="General Chat",
         description="For general movie chat not covered by other tools",
-        func=movie_chat.invoke,
+        func=general_chat.invoke,
     ),
     Tool.from_function(
         name="Movie Plot Search",  
@@ -31,9 +20,14 @@ tools = [
         func=get_movie_plot, 
     ),
     Tool.from_function(
-        name="Movie and Person Information Search",
-        description="Provide information about movies and persons, connections and relationship bewtween them using Cypher",
-        func = cypher_qa
+        name="Movie and Person Full Name Search",
+        description="Provide information about movies and persons, connections and relationship bewtween them by their full names using Cypher",
+        func=cypher_qa.invoke
+    ),
+    Tool.from_function(
+        name="Movie and Person Partial Name Match",
+        description="Provide information about movies and persons, with partial matches by their partial names using Cypher",
+        func=fuzzy_qa.invoke
     )
 ]
 
