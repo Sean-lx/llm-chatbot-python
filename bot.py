@@ -21,7 +21,7 @@ def handle_submit(message):
     """
 
     # Handle the response
-    with st.spinner('Thinking...'):
+    with st.spinner('Searching...'):
         response = generate_response(message)
         write_message('assistant', response)
 
